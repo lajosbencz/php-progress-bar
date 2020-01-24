@@ -52,7 +52,7 @@ class ProgressBar
         return $this;
     }
 
-    public function increment(int $count, ?string $info=null): self
+    public function increment(int $count=1, ?string $info=null): self
     {
         if($info !== null) {
             $this->setInfo($info);
