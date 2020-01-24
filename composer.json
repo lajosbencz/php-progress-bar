@@ -1,0 +1,19 @@
+{
+    "name": "lajosbencz/progress-bar",
+    "description": "Simple CLI progress bar for PHP",
+    "type": "library",
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Lajos Bencz",
+            "email": "lazos@lazos.me"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "LajosBencz\\ProgressBar\\": "src/LajosBencz/ProgressBar"
+        }
+    }
+}
