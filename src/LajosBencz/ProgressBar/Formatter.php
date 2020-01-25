@@ -6,49 +6,31 @@ namespace LajosBencz\ProgressBar;
 
 class Formatter implements FormatterInterface
 {
-    const DEFAULT_SYMBOLS = "[= ]";
-
     const ANSI_NEWLINE = "\n";
     const ANSI_RETURN_CARRIAGE = "\r";
     const ANSI_CURSOR_HIDE = "\e[?25l";
     const ANSI_CURSOR_SHOW = "\e[?25h";
     const ANSI_CURSOR_UP_N = "\033[%dA";
 
-    protected $_symbols = self::DEFAULT_SYMBOLS;
     protected $_clearLines = 0;
 
-    public function setSymbols(string $symbols): void
+    public function __construct()
     {
-        $l = strlen(self::DEFAULT_SYMBOLS);
-        if (strlen($symbols) < $l) {
-            throw new \InvalidArgumentException('symbols string must be at least ' . $l . ' chars');
-        }
-        $this->_symbols = $symbols;
+        $this->setWidth(10);
     }
 
-    public function formatBar(int $width, int $fill=0, float $fraction=0.0): string
+    public function setWidth(int $width): void
     {
-        $width = max(2, $width);
-        $out = "";
-
-        $out .= $this->_symbols[0];
-        for ($i = 1; $i < $width-1; $i++) {
-            if ($i < $fill) {
-                $out .= $this->_symbols[1];
-            } else {
-                $out .= $this->_symbols[2];
-            }
-        }
-        $out .= $this->_symbols[3];
-
-        return $out;
+        // ignore
     }
 
-    public function format(int $total, int $progress, int $width, string $info): string
+    public function formatBar(Progress $progress): string
     {
-        $progress = min($total, $progress);
-        $width = max(4, $width);
+        return '[ ' . str_pad((string)$progress, 6, ' ', STR_PAD_LEFT) . ' ]';
+    }
 
+    public function format(Progress $progress, string $info = ''): string
+    {
         $out = "";
 
         if ($this->_clearLines > 0) {
@@ -56,14 +38,13 @@ class Formatter implements FormatterInterface
         }
 
         $out .= self::ANSI_CURSOR_HIDE;
-        if(strlen($info) > 0) {
+        if (strlen($info) > 0) {
             $out .= rtrim($info) . self::ANSI_NEWLINE;
         }
 
-        $w = $width - 2;
-        $out .= $this->formatBar($w, (int)floor(($w / $total) * $progress));
+        $out .= $this->formatBar($progress);
 
-        if ($total === $progress) {
+        if ($progress->isDone()) {
             $this->_clearLines = 0;
             $out .= self::ANSI_RETURN_CARRIAGE;
             $out .= self::ANSI_CURSOR_SHOW;

@@ -9,38 +9,58 @@ use InvalidArgumentException;
 
 class ProgressBar
 {
-    protected $_progress = 0;
-    protected $_total = 100;
+    /** @var string */
     protected $_info = '';
-    protected $_width = 60;
+    /** @var resource */
     protected $_output = STDOUT;
-    protected $_formatterClass;
+    /** @var string */
+    protected $_formatterClass = Formatter::class;
+    /** @var array */
+    protected $_formatterArgs = [];
     /** @var FormatterInterface */
     protected $_formatter;
+    /** @var Progress */
+    protected $_progress;
 
-    public function __construct(string $formatterClass = Formatter::class)
+    public function __construct(int $total=100)
     {
-        $this->setFormatterClass($formatterClass);
+        $this->_progress = new Progress($total);
+        $this->reset();
     }
 
     public function __destruct()
     {
-        if($this->_progress < $this->_total) {
+        if ($this->isDone()) {
             $this->abort();
         }
         // do NOT close the output...
     }
 
-    public function __invoke(int $progress, string $info=''): void
+    public function isDone(): bool
+    {
+        return $this->_progress->isDone();
+    }
+
+    public function reset(): void
+    {
+        $this->_info = '';
+        $this->_formatter = null;
+        $this->_progress->reset();
+    }
+
+    public function __invoke(int $progress, string $info = ''): void
     {
         $this->update($progress, $info);
         $this->show();
     }
 
-    public function setFormatterClass(string $formatter): self
+    public function setFormatterClass(string $formatter, ?array $args=null): self
     {
-        if(!is_a($formatter, FormatterInterface::class, true)) {
+        if (!is_a($formatter, FormatterInterface::class, true)) {
             throw new \RuntimeException('must be instance of ' . FormatterInterface::class);
+        }
+        if($args !== null) {
+            $this->_formatterArgs = $args;
         }
         $this->_formatterClass = $formatter;
         return $this;
@@ -48,8 +68,8 @@ class ProgressBar
 
     public function getFormatter(): FormatterInterface
     {
-        if(!$this->_formatter) {
-            $this->_formatter = new $this->_formatterClass();
+        if (!$this->_formatter) {
+            $this->_formatter = new $this->_formatterClass(...$this->_formatterArgs);
         }
         return $this->_formatter;
     }
@@ -69,23 +89,9 @@ class ProgressBar
         return $this;
     }
 
-    public function setTotal(int $total): self
-    {
-        $this->_total = $total;
-        return $this;
-    }
-
     public function setWidth(int $width): self
     {
         $this->_width = $width;
-        return $this;
-    }
-
-    public function reset(): self
-    {
-        $this->_info = '';
-        $this->_progress = 0;
-        $this->_formatter = null;
         return $this;
     }
 
@@ -94,7 +100,7 @@ class ProgressBar
         if ($info !== null) {
             $this->setInfo($info);
         }
-        $this->_setProgress($progress);
+        $this->_progress->update($progress);
         return $this;
     }
 
@@ -103,7 +109,7 @@ class ProgressBar
         if ($info !== null) {
             $this->setInfo($info);
         }
-        $this->_setProgress($count);
+        $this->_progress->increment($count);
         return $this;
     }
 
@@ -113,21 +119,9 @@ class ProgressBar
         return $this;
     }
 
-    public function spin(?int $progress=null, ?string $info = null): self
-    {
-        if($progress !== null) {
-            $this->_setProgress($progress);
-        }
-        if($info !== null) {
-            $this->setInfo($info);
-        }
-        $this->show();
-        return $this;
-    }
-
     public function format(): string
     {
-        return $this->getFormatter()->format($this->_total, $this->_progress, $this->_width, $this->_info);
+        return $this->getFormatter()->format($this->_progress, $this->_info);
     }
 
     public function show(): void
@@ -144,10 +138,4 @@ class ProgressBar
         }
     }
 
-    protected function _setProgress(int $progress): void
-    {
-        $progress = max(0, $progress);
-        $progress = min($this->_total, $progress);
-        $this->_progress = $progress;
-    }
 }

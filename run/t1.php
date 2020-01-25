@@ -2,9 +2,13 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use LajosBencz\ProgressBar\Factory;
 use LajosBencz\ProgressBar\ProgressBar;
 
-function title(string $text, int $w = 60, string $pad = '-') {
+const SLP = 1000 * 100;
+const W = 60;
+
+function title(string $text, int $w = W, string $pad = '-') {
     return PHP_EOL .
         //str_repeat($pad, $w) . PHP_EOL .
         str_pad(' '.$text.' ', $w, $pad, STR_PAD_BOTH) . PHP_EOL .
@@ -12,17 +16,19 @@ function title(string $text, int $w = 60, string $pad = '-') {
         '' . PHP_EOL;
 };
 
-const SLP = 1000 * 10;
+//new Factory(LajosBencz\ProgressBar\Formatter\AdvancedFormatter::class, [W]);
+new Factory(LajosBencz\ProgressBar\Formatter\SpinningFormatter::class, []);
+echo get_class(Factory::createDefault()->getFormatter()), PHP_EOL;
 
 echo title('abort early');
 
-$pb = new ProgressBar;
+$pb = Factory::createDefault();
 $pb(0,  '');
 unset($pb);
 
 echo title('abort by unset');
 
-$pb = new ProgressBar;
+$pb = Factory::createDefault();
 for ($i = 0; $i < 100; $i++) {
     if ($i >= 33) {
         unset($pb);
@@ -35,7 +41,7 @@ for ($i = 0; $i < 100; $i++) {
 
 echo title('abort by method');
 
-$pb = new ProgressBar;
+$pb = Factory::createDefault();
 for ($i = 0; $i < 100; $i++) {
     if ($i >= 66) {
         $pb->abort();
@@ -47,7 +53,7 @@ for ($i = 0; $i < 100; $i++) {
 
 echo title('let it finish');
 
-$pb = new ProgressBar;
+$pb = Factory::createDefault();
 for ($i = 0; $i < 100; $i++) {
     $pb($i + 1, $i . '. item!');
     usleep(SLP);

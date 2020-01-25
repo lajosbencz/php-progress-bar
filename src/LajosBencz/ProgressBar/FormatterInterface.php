@@ -6,6 +6,7 @@ namespace LajosBencz\ProgressBar;
 
 interface FormatterInterface
 {
-    function format(int $total, int $progress, int $width, string $info): string;
+    function setWidth(int $width): void;
+    function format(Progress $progress, string $info): string;
     function abort(): string;
 }

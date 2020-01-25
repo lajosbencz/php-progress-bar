@@ -8,25 +8,26 @@ class FormatterTest extends TestCase
     public function provideFormat()
     {
         return [
-            ["|+-|", "|+-|", "\e[?25l|+-|\n"],
+            [  11, "[   1.1% ]", "\e[?25l[   1.1% ]\n"],
+            [ 111, "[  11.1% ]", "\e[?25l[  11.1% ]\n"],
+            [1111, "[ 100.0% ]", "\e[?25l[ 100.0% ]\r\e[?25h\n"],
         ];
     }
 
     /**
      * @dataProvider provideFormat
-     * @param string $symbols
+     * @param string $progress
      * @param string $bar
      * @param string $formatted
-     * @param int $width
-     * @param int $fill
      * @param string $info
      */
-    public function testFormat($symbols, $bar, $formatted, $width = 4, $fill = 2, $info = '')
+    public function testFormat($progress, $bar, $formatted, $info = '')
     {
+        $p = new LajosBencz\ProgressBar\Progress(1000);
+        $p->update($progress);
         $f = new Formatter;
-        $f->setSymbols($symbols);
-        $this->assertEquals($bar, $f->formatBar($width, $fill));
-        $this->assertEquals($formatted, $f->format($width, $fill, $width + 2, $info));
+        $this->assertEquals($bar, $f->formatBar($p));
+        $this->assertEquals($formatted, $f->format($p, $info));
     }
 
     public function testAbort()

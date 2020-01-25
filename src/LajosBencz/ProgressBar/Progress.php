@@ -20,7 +20,7 @@ class Progress
         return $this->_progress >= $this->_total;
     }
 
-    public function set(int $progress): bool
+    public function update(int $progress): bool
     {
         $progress = max(0, $progress);
         $progress = min($this->_total, $progress);
@@ -30,7 +30,7 @@ class Progress
 
     public function increment(int $count = 1): bool
     {
-        $this->set($this->_progress + $count);
+        $this->update($this->_progress + $count);
         return $this->isDone();
     }
 
@@ -46,17 +46,17 @@ class Progress
 
     public function getProgress(): int
     {
-        return $this->_progress;
+        return min($this->_total, $this->_progress);
     }
 
     public function getRatio(float $q=1): float
     {
-        return $this->_progress / $this->_total * $q;
+        return ($this->_progress / $this->_total) * $q;
     }
 
     public function __toString()
     {
-        return sprintf("%0.1f%%", $this->getRatio(100));
+        return str_pad(sprintf("%0.1f%%", $this->getRatio(100)), 6, ' ', STR_PAD_LEFT);
     }
 
 }
