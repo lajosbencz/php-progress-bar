@@ -12,9 +12,11 @@ branches:
 before_install:
   - travis_retry composer self-update
   - composer install --prefer-source --no-interaction --dev
-  - composer require phpunit/phpunit
+  - composer require phpunit/phpunit satooshi/php-coveralls
 
-script: phpunit --bootstrap vendor/autoload.php tests
+script:
+  - mkdir -p build/logs
+  - phpunit --coverage-clover build/logs/clover.xml --bootstrap vendor/autoload.php tests
 
 #matrix:
 #  allow_failures:
