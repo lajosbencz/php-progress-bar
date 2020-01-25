@@ -53,7 +53,7 @@ class Formatter implements FormatterInterface
             $out .= self::ANSI_NEWLINE;
             $nCount = substr_count($out, self::ANSI_NEWLINE);
             if ($this->_clearLines > $nCount) {
-                $out .= str_repeat(self::ANSI_NEWLINE, $nCount - $this->_clearLines);
+                $out .= str_repeat(self::ANSI_NEWLINE, $this->_clearLines - $nCount);
             }
             $this->_clearLines = $nCount;
         }

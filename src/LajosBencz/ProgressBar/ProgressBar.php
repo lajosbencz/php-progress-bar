@@ -30,9 +30,7 @@ class ProgressBar
 
     public function __destruct()
     {
-        if ($this->isDone()) {
-            $this->abort();
-        }
+        $this->abort();
         // do NOT close the output...
     }
 
@@ -89,12 +87,6 @@ class ProgressBar
         return $this;
     }
 
-    public function setWidth(int $width): self
-    {
-        $this->_width = $width;
-        return $this;
-    }
-
     public function update(int $progress, ?string $info = null): self
     {
         if ($info !== null) {
@@ -133,7 +125,7 @@ class ProgressBar
     protected function _write(string $text): void
     {
         $l = strlen($text);
-        if (fwrite($this->_output, $text) !== $l) {
+        if (!is_resource($this->_output) || fwrite($this->_output, $text) !== $l) {
             throw new Exception('failed writing to output stream');
         }
     }

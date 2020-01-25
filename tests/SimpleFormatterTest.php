@@ -34,4 +34,10 @@ class SimpleFormatterTest extends TestCase
         $this->assertEquals($formatted, $f->format($p, $info));
     }
 
+    public function testSymbolsInvalid()
+    {
+        $this->expectExceptionMessageRegExp('/symbols string must be at least [\d]+ chars/');
+        new SimpleFormatter(100, '1');
+    }
+
 }

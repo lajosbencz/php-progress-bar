@@ -1,0 +1,22 @@
+dist: bionic
+language: php
+php:
+  - '7.2'
+  - '7.3'
+  - '7.4'
+
+branches:
+  only:
+    - master
+
+before_install:
+  - travis_retry composer self-update
+  - composer install --prefer-source --no-interaction --dev
+  - composer require phpunit/phpunit
+
+script: phpunit --bootstrap vendor/autoload.php tests
+
+#matrix:
+#  allow_failures:
+#    - php: nightly
+#  fast_finish: true

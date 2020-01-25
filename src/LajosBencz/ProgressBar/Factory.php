@@ -4,10 +4,9 @@ declare(strict_types=1);
 namespace LajosBencz\ProgressBar;
 
 /**
- * @property-read string $formatterClass
- * @property-read array $formatterArgs
- * @property-read int $width
- * @property-read resource $output
+ * @property string $formatterClass
+ * @property array $formatterArgs
+ * @property resource $output
  */
 class Factory
 {
@@ -48,9 +47,14 @@ class Factory
     public static function createDefault(): ProgressBar
     {
         if (!self::$_defaultFactory) {
-            self::$_defaultFactory = new self;
+            self::$_defaultFactory = new static;
         }
         return self::$_defaultFactory->create();
+    }
+
+    public static function clearDefault(): void
+    {
+        self::$_defaultFactory = null;
     }
 
     public function setDefault(): void

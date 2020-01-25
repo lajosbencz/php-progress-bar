@@ -23,7 +23,7 @@ class SimpleFormatter extends Formatter implements FormatterInterface
             $this->setWidth($width);
         }
         if(strlen($symbols) > 0) {
-            $this->_symbols = $symbols;
+            $this->setSymbols($symbols);
         }
     }
 
