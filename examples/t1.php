@@ -3,7 +3,6 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use LajosBencz\ProgressBar\Factory;
-use LajosBencz\ProgressBar\ProgressBar;
 
 const SLP = 1000 * 100;
 const W = 60;
@@ -16,8 +15,7 @@ function title(string $text, int $w = W, string $pad = '-') {
         '' . PHP_EOL;
 };
 
-//new Factory(LajosBencz\ProgressBar\Formatter\AdvancedFormatter::class, [W]);
-new Factory(LajosBencz\ProgressBar\Formatter\SpinningFormatter::class, []);
+new Factory(LajosBencz\ProgressBar\Formatter\SimpleFormatter::class, [60]);
 echo get_class(Factory::createDefault()->getFormatter()), PHP_EOL;
 
 echo title('abort early');
