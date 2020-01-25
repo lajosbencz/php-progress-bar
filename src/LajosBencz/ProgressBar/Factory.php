@@ -44,12 +44,12 @@ class Factory
         }
     }
 
-    public static function createDefault(): ProgressBar
+    public static function createDefault(int $total=100): ProgressBar
     {
         if (!self::$_defaultFactory) {
             self::$_defaultFactory = new static;
         }
-        return self::$_defaultFactory->create();
+        return self::$_defaultFactory->create($total);
     }
 
     public static function clearDefault(): void
@@ -75,9 +75,9 @@ class Factory
         throw new \RuntimeException();
     }
 
-    public function create(): ProgressBar
+    public function create(int $total=100): ProgressBar
     {
-        return (new ProgressBar)
+        return (new ProgressBar($total))
             ->setFormatterClass($this->formatterClass, $this->formatterArgs)
             ->setOutput($this->output);
     }
