@@ -8,7 +8,7 @@ class FormatterTest extends TestCase
     public function provideFormat()
     {
         return [
-            ["|+-|", "|+-|", "|+-|"],
+            ["|+-|", "|+-|", "\e[?25l|+-|\n"],
         ];
     }
 
@@ -26,11 +26,12 @@ class FormatterTest extends TestCase
         $f = new Formatter;
         $f->setSymbols($symbols);
         $this->assertEquals($bar, $f->formatBar($width, $fill));
-        $this->assertEquals($formatted, $f->format($width, $fill, $width, $info));
+        $this->assertEquals($formatted, $f->format($width, $fill, $width + 2, $info));
     }
 
     public function testAbort()
     {
-
+        $f = new Formatter;
+        $this->assertEquals(Formatter::ANSI_CURSOR_SHOW, $f->abort());
     }
 }

@@ -28,11 +28,12 @@ class Formatter implements FormatterInterface
 
     public function formatBar(int $width, int $fill=0, float $fraction=0.0): string
     {
+        $width = max(2, $width);
         $out = "";
 
         $out .= $this->_symbols[0];
-        for ($i = 0; $i < $width; $i++) {
-            if ($i <= $fill) {
+        for ($i = 1; $i < $width-1; $i++) {
+            if ($i < $fill) {
                 $out .= $this->_symbols[1];
             } else {
                 $out .= $this->_symbols[2];
@@ -46,7 +47,7 @@ class Formatter implements FormatterInterface
     public function format(int $total, int $progress, int $width, string $info): string
     {
         $progress = min($total, $progress);
-        $width = max(5, $width);
+        $width = max(4, $width);
 
         $out = "";
 
@@ -59,7 +60,8 @@ class Formatter implements FormatterInterface
             $out .= rtrim($info) . self::ANSI_NEWLINE;
         }
 
-        $out .= $this->formatBar($width, (int)floor(($width / $total) * $progress));
+        $w = $width - 2;
+        $out .= $this->formatBar($w, (int)floor(($w / $total) * $progress));
 
         if ($total === $progress) {
             $this->_clearLines = 0;

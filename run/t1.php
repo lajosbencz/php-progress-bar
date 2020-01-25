@@ -14,6 +14,12 @@ function title(string $text, int $w = 60, string $pad = '-') {
 
 const SLP = 1000 * 10;
 
+echo title('abort early');
+
+$pb = new ProgressBar;
+$pb(0,  '');
+unset($pb);
+
 echo title('abort by unset');
 
 $pb = new ProgressBar;
