@@ -10,10 +10,18 @@
         }
     ],
     "minimum-stability": "stable",
-    "require": {},
+    "require": {
+        "php": ">=7"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "@stable"
+    },
     "autoload": {
         "psr-4": {
             "LajosBencz\\ProgressBar\\": "src/LajosBencz/ProgressBar"
         }
+    },
+    "scripts": {
+        "test": "phpunit"
     }
 }
