@@ -11,8 +11,21 @@ class Progress
 
     public function __construct(int $total = 100)
     {
-        $this->_total = $total;
+        $this->setTotal($total);
         $this->reset();
+    }
+
+    public function setTotal(int $total): void
+    {
+        if($total < 1) {
+            throw new \InvalidArgumentException('total must be greater than 0');
+        }
+        $this->_total = max(1, $total);
+    }
+
+    public function getTotal(): int
+    {
+        return $this->_total;
     }
 
     public function isDone(): bool
@@ -37,11 +50,6 @@ class Progress
     public function reset(): void
     {
         $this->_progress = 0;
-    }
-
-    public function getTotal(): int
-    {
-        return $this->_total;
     }
 
     public function getProgress(): int

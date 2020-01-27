@@ -32,7 +32,10 @@ class ProgressBarTest extends TestCase
     public function testProgressBar()
     {
         $b = fopen('php://memory', 'w+');
-        $pb = new ProgressBar(100);
+        $pb = new ProgressBar(1);
+        $this->assertEquals(1, $pb->getTotal());
+        $pb->setTotal(100);
+        $this->assertEquals(100, $pb->getTotal());
         $this->assertFalse($pb->isDone());
         $pb->setOutput($b);
         $pb->increment()->show();

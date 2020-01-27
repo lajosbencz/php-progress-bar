@@ -34,6 +34,16 @@ class ProgressBar
         // do NOT close the output...
     }
 
+    public function setTotal(int $total): void
+    {
+        $this->_progress->setTotal($total);
+    }
+
+    public function getTotal(): int
+    {
+        return $this->_progress->getTotal();
+    }
+
     public function isDone(): bool
     {
         return $this->_progress->isDone();

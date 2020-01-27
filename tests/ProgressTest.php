@@ -55,4 +55,11 @@ class ProgressTest extends TestCase
         $this->assertEquals(0.5, $p->getRatio());
         $this->assertEquals(5, $p->getRatio(10));
     }
+
+    public function testInvalidTotal()
+    {
+        $p = new Progress(100);
+        $this->expectExceptionMessage('total must be greater than 0');
+        $p->setTotal(0);
+    }
 }
