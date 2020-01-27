@@ -18,7 +18,7 @@ $pb = ProgressBar\Factory::createDefault(10);
 
 for($i=0; $i<10; $i++) {
     sleep(1);
-    $pb($i);
+    $pb($i + 1);
 }
 ```
 
@@ -32,7 +32,7 @@ $pb->setOutput(STDOUT);
 
 for($i=0; $i<10; $i++) {
     sleep(1);
-    $pb($i);
+    $pb($i + 1);
 }
 ```
 
@@ -52,7 +52,7 @@ $pbf = new ProgressBar\Factory(
 $pb = $pbf->create(10);
 for($i=0; $i<10; $i++) {
     sleep(1);
-    $pb($i);
+    $pb($i + 1);
 }
 ```
 
