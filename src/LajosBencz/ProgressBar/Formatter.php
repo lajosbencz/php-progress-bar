@@ -16,7 +16,6 @@ class Formatter implements FormatterInterface
 
     public function __construct()
     {
-        $this->setWidth(10);
     }
 
     public function setWidth(int $width): void

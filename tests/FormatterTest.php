@@ -27,6 +27,7 @@ class FormatterTest extends TestCase
         $p = new LajosBencz\ProgressBar\Progress(1000);
         $p->update($progress);
         $f = new Formatter;
+        $f->setWidth(1);
         $this->assertEquals($bar, $f->formatBar($p));
         $this->assertEquals($formatted, $f->format($p, $info));
     }

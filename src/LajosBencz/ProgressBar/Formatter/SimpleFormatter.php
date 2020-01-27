@@ -17,14 +17,11 @@ class SimpleFormatter extends Formatter implements FormatterInterface
 
     protected $_symbols = self::DEFAULT_SYMBOLS;
 
-    public function __construct(int $width=0, string $symbols='')
+    public function __construct(?int $width=null, ?string $symbols=null)
     {
-        if($width > 0) {
-            $this->setWidth($width);
-        }
-        if(strlen($symbols) > 0) {
-            $this->setSymbols($symbols);
-        }
+        parent::__construct();
+        $this->setWidth($width ?? Factory::DEFAULT_WIDTH);
+        $this->setSymbols($symbols ?? static::DEFAULT_SYMBOLS);
     }
 
     public function setWidth(int $width): void
@@ -34,7 +31,7 @@ class SimpleFormatter extends Formatter implements FormatterInterface
 
     public function setSymbols(string $symbols): void
     {
-        $l = strlen(self::DEFAULT_SYMBOLS);
+        $l = strlen(static::DEFAULT_SYMBOLS);
         if (strlen($symbols) < $l) {
             throw new \InvalidArgumentException('symbols string must be at least ' . $l . ' chars');
         }

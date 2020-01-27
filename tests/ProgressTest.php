@@ -54,6 +54,8 @@ class ProgressTest extends TestCase
         $p->update(50);
         $this->assertEquals(0.5, $p->getRatio());
         $this->assertEquals(5, $p->getRatio(10));
+        $p->setTotal(50);
+        $this->assertEquals(1, $p->getRatio());
     }
 
     public function testInvalidTotal()

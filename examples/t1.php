@@ -15,7 +15,7 @@ function title(string $text, int $w = W, string $pad = '-') {
         '' . PHP_EOL;
 };
 
-new Factory(LajosBencz\ProgressBar\Formatter\SimpleFormatter::class, [60]);
+new Factory(LajosBencz\ProgressBar\Formatter\AdvancedFormatter::class, [60, "[=|/-\\ ]"]);
 echo get_class(Factory::createDefault()->getFormatter()), PHP_EOL;
 
 echo title('abort early');
